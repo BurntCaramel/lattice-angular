@@ -1,9 +1,14 @@
-<table>
-  <tbody>
-    <tr>
-      <td>
-        <p>lattice-table works!</p>
+<table class="border-collapse border">
+  <tbody [formGroup]="form">
+    <tr *ngFor="let row of data.rows">
+      <td *ngFor="let column of data.columns" class="border">
+        <input type="text" [formControlName]="column + row" (focus)="focusCellInput(column, row)" placeholder="{{ column + row }}" class="block px-2 py-2">
       </td>
     </tr>
   </tbody>
 </table>
+
+<dl *ngFor="let cell of data.cellValues | keyvalue">
+  <dt class="font-bold inline-block">{{cell.key}}</dt>
+  <dd>{{cell.value}}</dd>
+</dl>

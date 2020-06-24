@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LatticeTableComponent } from './lattice-table/lattice-table.component';
+import { LatticeSheetComponent } from './lattice-sheet/lattice-sheet.component';
 
 
 const routes: Routes = [
-  { path: 'first', component: LatticeTableComponent }
+  { path: 'first', component: LatticeSheetComponent }
 ];
 
 @NgModule({
