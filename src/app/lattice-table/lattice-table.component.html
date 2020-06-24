@@ -35,8 +35,11 @@
 </table>
 
 <aside class="mt-4">
+  <h2 class="font-bold">Raw values</h2>
   <dl *ngFor="let cell of data.cellValues | keyvalue">
-    <dt class="font-bold inline-block">{{cell.key}}</dt>
-    <dd>{{cell.value}}</dd>
+    <div class="flex">
+      <dt class="w-12 font-bold inline-block">{{cell.key}}</dt>
+      <dd><pre>{{cell.value}}</pre></dd>
+    </div>
   </dl>
 </aside>
