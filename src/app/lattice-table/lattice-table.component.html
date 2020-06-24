@@ -34,7 +34,9 @@
   </tbody>
 </table>
 
-<dl *ngFor="let cell of data.cellValues | keyvalue">
-  <dt class="font-bold inline-block">{{cell.key}}</dt>
-  <dd>{{cell.value}}</dd>
-</dl>
+<aside class="mt-4">
+  <dl *ngFor="let cell of data.cellValues | keyvalue">
+    <dt class="font-bold inline-block">{{cell.key}}</dt>
+    <dd>{{cell.value}}</dd>
+  </dl>
+</aside>

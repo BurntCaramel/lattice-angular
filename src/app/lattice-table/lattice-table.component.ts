@@ -8,6 +8,7 @@ import {
   AbstractControlOptions,
   AsyncValidatorFn,
 } from '@angular/forms';
+import { Evaluator } from '../evaluator.service';
 
 class TableFormGroup extends FormGroup {
   constructor(
@@ -47,6 +48,7 @@ class TableFormGroup extends FormGroup {
 })
 export class LatticeTableComponent implements OnInit {
   @Input() data: TableData;
+  @Input() evaluator: Evaluator;
   @ViewChild('tableBody', { static: true }) tableBodyRef: {
     nativeElement: HTMLTableSectionElement;
   };
@@ -83,12 +85,21 @@ export class LatticeTableComponent implements OnInit {
     return this.focusedCell.column === column && this.focusedCell.row === row;
   }
 
+  readRawValueForCellID(cellID: string): string | null {
+    return this.data.cellValues.get(cellID) || null;
+  }
+
   calculateValueForCell(column: string, row: string): string | null {
     const cellID = this.cellIDFor(column, row);
-    const rawValue = this.form.get(cellID).value;
-    if (typeof rawValue === 'string' && rawValue.startsWith('=')) {
-      const f = new Function(`return ${rawValue.slice(1)}`);
-      return f();
+    const rawValue = this.readRawValueForCellID(cellID);
+    if (typeof rawValue === 'string') {
+      return this.evaluator.evaluate(rawValue, {
+        readCell: (cellID) => {
+          const value = this.readRawValueForCellID(cellID)
+          console.log("READ", cellID, value)
+          return value;
+        }
+      });
     }
 
     return null;

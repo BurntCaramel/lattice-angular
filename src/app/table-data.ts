@@ -7,7 +7,10 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 export class TableData {
   cellValues: TableCellValues = new Map<CellID, CellValue>([
     ["A1", "Value for A1"],
-    ["B1", "Value for B1"]
+    ["B1", "Value for B1"],
+    ["B2", "= B1"],
+    ["B3", "= LEN(B1)"],
+    ["C1", "= 5 + 5"],
   ]);
 
   static fromObject(object: Record<string, string>): TableData {

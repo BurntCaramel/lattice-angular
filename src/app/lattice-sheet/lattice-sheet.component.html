@@ -1,4 +1,7 @@
 <div class="p-4">
   <p>Sheet</p>
-  <app-lattice-table [data]="tableData$ | async"></app-lattice-table>
+  <app-lattice-table
+    [data]="tableData$ | async"
+    [evaluator]="evaluator"
+  ></app-lattice-table>
 </div>
