@@ -5,6 +5,17 @@ export type TableCellValues = Map<CellID, CellValue>;
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 export class TableData {
+  // columnCount = 8;
+  columnCount = 8;
+  rowCount = 12;
+
+  constructor(options?: { columnCount: number, rowCount: number}) {
+    if (options) {
+      this.columnCount = options.columnCount;
+      this.rowCount = options.rowCount;
+    }
+  }
+
   cellValues: TableCellValues = new Map<CellID, CellValue>([
     ['A1', 'Type any text'],
     ['B1', 'This will appear twice'],
@@ -29,9 +40,6 @@ export class TableData {
     });
     return tableData;
   }
-
-  columnCount = 8;
-  rowCount = 12;
 
   get columns(): Iterable<string> {
     return alphabet.slice(0, this.columnCount);

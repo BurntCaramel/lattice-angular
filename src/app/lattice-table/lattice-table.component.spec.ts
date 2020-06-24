@@ -18,7 +18,10 @@ describe('LatticeTableComponent', () => {
     fixture = TestBed.createComponent(LatticeTableComponent);
     component = fixture.componentInstance;
 
-    component.data = new TableData();
+    component.data = new TableData({
+      columnCount: 17,
+      rowCount: 21
+    });
     component.evaluatorService = {
       evaluatorForEnvironment(
         environment: EvaluatorEnvironment
@@ -38,7 +41,7 @@ describe('LatticeTableComponent', () => {
     expect(fixture.nativeElement.querySelector('table')).toBeTruthy();
   });
 
-  it('shows 12 rows', () => {
-    expect(fixture.nativeElement.querySelectorAll('tbody tr').length).toBe(12)
+  it('shows 21 rows', () => {
+    expect(fixture.nativeElement.querySelectorAll('tbody tr').length).toBe(21)
   });
 });
