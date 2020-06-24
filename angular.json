@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "lattice-angular"
+    }
+  },
+  "defaultProject": "lattice-angular",
+  "cli": {
+    "analytics": "78b47ee6-67f2-4def-b37a-82d1d38d90a1"
+  }
 }
