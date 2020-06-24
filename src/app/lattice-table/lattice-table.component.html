@@ -1,13 +1,13 @@
 <table class="border-collapse border">
   <thead>
     <tr>
-      <th></th>
+      <th role="none"></th>
       <th *ngFor="let column of data.columns" class="border bg-gray-100">{{ column }}</th>
     </tr>
   </thead>
   <tbody [formGroup]="form" #tableBody>
     <tr *ngFor="let row of data.rows">
-      <th class="border bg-gray-100">{{ row }}</th>
+      <th role="rowheader" class="border bg-gray-100">{{ row }}</th>
       <td *ngFor="let column of data.columns" class="border">
         <label class="block relative">
           <div
