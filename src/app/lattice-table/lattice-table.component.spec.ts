@@ -18,7 +18,6 @@ describe('LatticeTableComponent', () => {
     fixture = TestBed.createComponent(LatticeTableComponent);
     component = fixture.componentInstance;
 
-    // component.data = { cellValues: new Map() };
     component.data = new TableData();
     component.evaluatorService = {
       evaluatorForEnvironment(
@@ -33,5 +32,13 @@ describe('LatticeTableComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('shows table', () => {
+    expect(fixture.nativeElement.querySelector('table')).toBeTruthy();
+  });
+
+  it('shows 12 rows', () => {
+    expect(fixture.nativeElement.querySelectorAll('tbody tr').length).toBe(12)
   });
 });
