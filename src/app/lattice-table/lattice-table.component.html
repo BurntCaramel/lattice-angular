@@ -1,8 +1,34 @@
 <table class="border-collapse border">
-  <tbody [formGroup]="form">
+  <thead>
+    <tr>
+      <th></th>
+      <th *ngFor="let column of data.columns" class="border bg-gray-100">{{ column }}</th>
+    </tr>
+  </thead>
+  <tbody [formGroup]="form" #tableBody>
     <tr *ngFor="let row of data.rows">
+      <th class="border bg-gray-100">{{ row }}</th>
       <td *ngFor="let column of data.columns" class="border">
-        <input type="text" [formControlName]="column + row" (focus)="focusCellInput(column, row)" placeholder="{{ column + row }}" class="block px-2 py-2">
+        <label class="block relative">
+          <div
+            *ngIf="!isFocused(column, row)"
+            class="block px-2 py-2 absolute w-full bg-white"
+            (click)="focusCellInput(column, row)"
+          >
+            {{calculateValueForCell(column, row)}}
+          </div>
+          <input
+            type="text"
+            [attr.data-column]="column"
+            [attr.data-row]="row"
+            [formControlName]="cellIDFor(column, row)"
+            (focus)="focusCellInput(column, row)"
+            (blur)="blurCellInput(column, row)"
+            (keyup.enter)="enterKey(column, row)"
+            placeholder="{{ column + row }}"
+            class="block px-2 py-2 focus:shadow-outline focus:bg-blue-100"
+          >
+        </label>
       </td>
     </tr>
   </tbody>

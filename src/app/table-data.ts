@@ -13,11 +13,12 @@ export class TableData {
   static fromObject(object: Record<string, string>): TableData {
     const tableData = new TableData();
     Object.keys(object).forEach(key => {
-      if (key === "empty") {
+      const value = object[key];
+      if (key === "empty" || value === "") {
         return;
       }
 
-      tableData.cellValues.set(key, object[key]);
+      tableData.cellValues.set(key, value);
     })
     return tableData;
   }

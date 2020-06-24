@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { TableData } from '../table-data';
 import {
   FormControl,
@@ -22,14 +22,6 @@ class TableFormGroup extends FormGroup {
     asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null
   ) {
     super(controls, validatorOrOpts, asyncValidator);
-    // super(
-    //   controls,
-    //   (control: AbstractControl) => {
-    //     console.log("validate", control)
-    //     return null;
-    //   },
-    //   asyncValidator
-    // );
 
     this.registerControl('empty', new FormControl(''));
   }
@@ -55,7 +47,12 @@ class TableFormGroup extends FormGroup {
 })
 export class LatticeTableComponent implements OnInit {
   @Input() data: TableData;
+  @ViewChild('tableBody', { static: true }) tableBodyRef: {
+    nativeElement: HTMLTableSectionElement;
+  };
   form: FormGroup;
+
+  focusedCell: { column: string; row: string } | null = null;
 
   constructor() {}
 
@@ -70,16 +67,62 @@ export class LatticeTableComponent implements OnInit {
     this.form.valueChanges.subscribe({
       next: (value) => {
         this.data = TableData.fromObject(value);
-        // console.log("form changed", value);
-      }
-    })
+      },
+    });
+  }
+
+  cellIDFor(column: string, row: string) {
+    return `${column}${row}`;
+  }
+
+  isFocused(column: string, row: string): boolean {
+    if (this.focusedCell === null) {
+      return false;
+    }
+
+    return this.focusedCell.column === column && this.focusedCell.row === row;
+  }
+
+  calculateValueForCell(column: string, row: string): string | null {
+    const cellID = this.cellIDFor(column, row);
+    const rawValue = this.form.get(cellID).value;
+    if (typeof rawValue === 'string' && rawValue.startsWith('=')) {
+      const f = new Function(`return ${rawValue.slice(1)}`);
+      return f();
+    }
+
+    return null;
   }
 
   focusCellInput(column: string, row: string) {
+    this.focusedCell = { column, row };
+
     const cellID = `${column}${row}`;
-    console.log("focus", cellID);
+    console.log('focus', cellID);
     if (!this.form.contains(cellID)) {
-      this.form.addControl(cellID, new FormControl(""));
+      this.form.addControl(cellID, new FormControl(''));
+    }
+  }
+
+  blurCellInput(column: string, row: string) {
+    this.focusedCell = null;
+
+    const cellID = `${column}${row}`;
+    console.log('blur', cellID);
+    const control = this.form.get(cellID);
+    if (control.value === '') {
+      this.form.removeControl(cellID);
+    }
+  }
+
+  enterKey(column: string, row: string) {
+    const tableBodyEl = this.tableBodyRef.nativeElement;
+    const targetRow = parseInt(row, 10) + 1;
+    const targetEl = tableBodyEl.querySelector(
+      `input[data-column="${column}"][data-row="${targetRow}"]`
+    );
+    if (targetEl instanceof HTMLElement) {
+      targetEl.focus();
     }
   }
 }
