@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TableData } from '../table-data';
 import { SheetService } from '../sheet.service';
-import { EvaluatorService, Evaluator } from '../evaluator.service';
+import { EvaluatorService } from '../evaluator.service';
 
 @Component({
   selector: 'app-lattice-sheet',
@@ -12,12 +12,12 @@ import { EvaluatorService, Evaluator } from '../evaluator.service';
 })
 export class LatticeSheetComponent implements OnInit {
   tableData$: Observable<TableData>;
-  evaluator: Evaluator;
+  evaluatorService: EvaluatorService;
 
   // constructor(@Inject(SheetService) sheetService: SheetService, @Inject(EvaluatorService) evaluatorService: EvaluatorService) {
   constructor(sheetService: SheetService, evaluatorService: EvaluatorService) {
     this.tableData$ = sheetService.getTableData();
-    this.evaluator = evaluatorService.primary();
+    this.evaluatorService = evaluatorService;
   }
 
   ngOnInit(): void {}

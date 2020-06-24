@@ -1,31 +1,76 @@
 import { Injectable } from '@angular/core';
 
 export interface EvaluatorEnvironment {
-  readCell: (cellID: string) => string | null
+  readCell: (cellID: string) => string | null;
 }
 
-export interface Evaluator {
-  evaluate(input: string, environment: EvaluatorEnvironment): string | null
+export interface CellEvaluator {
+  (cellID: string): string | null;
 }
 
-function evaluateExpression(expression: string, environment: EvaluatorEnvironment): string {
-  console.log("EXP", expression)
+function evaluateExpression(
+  expression: string,
+  environment: EvaluatorEnvironment
+): string {
   const body = expression.replace(/\b[A-Z][0-9]+/g, (cellID) => {
     cellID = cellID.trim();
     const result = environment.readCell(cellID);
     return JSON.stringify(result);
-  })
-  console.log("body", body)
+  });
 
-  function LEN(input: string): number {
-    return input.length;
+  type Value = string | number;
+
+  function LEN(input: Value): number {
+    return `${input}`.length;
   }
-  function JOIN(first: string, second: string): string {
-    return first + second;
+  function JOIN(first: Value, second: Value): string {
+    return `${first}${second}`;
   }
 
   const f = new Function('LEN', 'JOIN', `return ${body}`);
   return f(LEN, JOIN);
+}
+
+function evaluatorForEnvironment(
+  environment: EvaluatorEnvironment
+): (cellID: string) => string | null {
+  const visitedCellIDs = new Set<string>();
+  const evaluatedCells = new Map<string, string>();
+
+  function readCell(cellID: string): string | null {
+    if (visitedCellIDs.has(cellID)) {
+      throw Object.assign(new Error('Circular references'), { visitedCellIDs });
+    }
+
+    visitedCellIDs.add(cellID);
+    return environment.readCell(cellID);
+  }
+
+  const evaluatingEnvironment = {
+    readCell: evaluateCell,
+  };
+
+  function evaluateCell(cellID: string): string | null {
+    if (evaluatedCells.has(cellID)) {
+      return evaluatedCells.get(cellID);
+    }
+
+    const rawValue = readCell(cellID);
+
+    if (typeof rawValue === 'string' && rawValue.startsWith('=')) {
+      const value = evaluateExpression(
+        rawValue.slice(1),
+        evaluatingEnvironment
+      );
+      evaluatedCells.set(cellID, value);
+      return value;
+    }
+
+    evaluatedCells.set(cellID, rawValue);
+    return rawValue;
+  }
+
+  return evaluateCell;
 }
 
 @Injectable({
@@ -34,14 +79,7 @@ function evaluateExpression(expression: string, environment: EvaluatorEnvironmen
 export class EvaluatorService {
   constructor() {}
 
-  primary(): Evaluator {
-    return this;
-  }
-
-  evaluate(input: string, environment: EvaluatorEnvironment): string | null {
-    if (typeof input === 'string' && input.startsWith('=')) {
-      // return null;
-      return evaluateExpression(input.slice(1), environment);
-    }
+  evaluatorForEnvironment(environment: EvaluatorEnvironment): CellEvaluator {
+    return evaluatorForEnvironment(environment);
   }
 }

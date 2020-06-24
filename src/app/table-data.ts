@@ -11,6 +11,8 @@ export class TableData {
     ["B2", "= B1"],
     ["B3", "= LEN(B1)"],
     ["C1", "= 5 + 5"],
+    ["C2", "= C1 * 10"],
+    ["C3", "= C2 * 10"],
   ]);
 
   static fromObject(object: Record<string, string>): TableData {

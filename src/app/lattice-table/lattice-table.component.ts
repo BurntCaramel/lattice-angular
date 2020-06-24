@@ -8,7 +8,7 @@ import {
   AbstractControlOptions,
   AsyncValidatorFn,
 } from '@angular/forms';
-import { Evaluator } from '../evaluator.service';
+import { EvaluatorService } from '../evaluator.service';
 
 class TableFormGroup extends FormGroup {
   constructor(
@@ -48,7 +48,7 @@ class TableFormGroup extends FormGroup {
 })
 export class LatticeTableComponent implements OnInit {
   @Input() data: TableData;
-  @Input() evaluator: Evaluator;
+  @Input() evaluatorService: EvaluatorService;
   @ViewChild('tableBody', { static: true }) tableBodyRef: {
     nativeElement: HTMLTableSectionElement;
   };
@@ -93,13 +93,17 @@ export class LatticeTableComponent implements OnInit {
     const cellID = this.cellIDFor(column, row);
     const rawValue = this.readRawValueForCellID(cellID);
     if (typeof rawValue === 'string') {
-      return this.evaluator.evaluate(rawValue, {
-        readCell: (cellID) => {
-          const value = this.readRawValueForCellID(cellID)
-          console.log("READ", cellID, value)
-          return value;
+      const evaluateValueForCell = this.evaluatorService.evaluatorForEnvironment(
+        {
+          readCell: (cellID) => this.readRawValueForCellID(cellID),
         }
-      });
+      );
+
+      try {
+        return evaluateValueForCell(cellID);
+      } catch (error) {
+        return `ERROR! ${error.message}`;
+      }
     }
 
     return null;
@@ -109,7 +113,6 @@ export class LatticeTableComponent implements OnInit {
     this.focusedCell = { column, row };
 
     const cellID = `${column}${row}`;
-    console.log('focus', cellID);
     if (!this.form.contains(cellID)) {
       this.form.addControl(cellID, new FormControl(''));
     }
@@ -119,7 +122,6 @@ export class LatticeTableComponent implements OnInit {
     this.focusedCell = null;
 
     const cellID = `${column}${row}`;
-    console.log('blur', cellID);
     const control = this.form.get(cellID);
     if (control.value === '') {
       this.form.removeControl(cellID);
