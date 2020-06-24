@@ -27,10 +27,6 @@ class TableFormGroup extends FormGroup {
     this.registerControl('empty', new FormControl(''));
   }
 
-  // contains(controlName: string) {
-  //   return true;
-  // }
-
   get(path: Array<string | number> | string): AbstractControl | null {
     const control = super.get(path);
     if (!control) {
