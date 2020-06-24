@@ -89,7 +89,7 @@ export class LatticeTableComponent implements OnInit {
     return this.data.cellValues.get(cellID) || null;
   }
 
-  calculateValueForCell(column: string, row: string): string | null {
+  calculateValueForCell(column: string, row: string): string | number | null {
     const cellID = this.cellIDFor(column, row);
     const rawValue = this.readRawValueForCellID(cellID);
     if (typeof rawValue === 'string') {

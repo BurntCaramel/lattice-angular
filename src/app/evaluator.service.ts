@@ -4,8 +4,10 @@ export interface EvaluatorEnvironment {
   readCell: (cellID: string) => string | null;
 }
 
+type Value = string | number;
+
 export interface CellEvaluator {
-  (cellID: string): string | null;
+  (cellID: string): Value | null;
 }
 
 function evaluateExpression(
@@ -18,7 +20,6 @@ function evaluateExpression(
     return JSON.stringify(result);
   });
 
-  type Value = string | number;
 
   function LEN(input: Value): number {
     return `${input}`.length;
