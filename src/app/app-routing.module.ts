@@ -4,6 +4,7 @@ import { LatticeSheetComponent } from './lattice-sheet/lattice-sheet.component';
 
 
 const routes: Routes = [
+  { path: '', component: LatticeSheetComponent },
   { path: 'first', component: LatticeSheetComponent }
 ];
 
