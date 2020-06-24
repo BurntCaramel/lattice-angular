@@ -6,13 +6,15 @@ const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 export class TableData {
   cellValues: TableCellValues = new Map<CellID, CellValue>([
-    ['A1', 'Value for A1'],
-    ['B1', 'Value for B1'],
+    ['A1', 'Type any text'],
+    ['B1', 'This will appear twice'],
     ['B2', '= B1'],
-    ['B3', '= LEN(B1)'],
-    ['C1', '= 5 + 5'],
-    ['C2', '= C1 * 10'],
-    ['C3', '= C2 * 10'],
+    ['B4', 'Count using `LEN`'],
+    ['B5', '= LEN(B1)'],
+    ['D1', '= 5 + 5'],
+    ['D2', '= D1 * 10'],
+    ['D3', '= D2 * 10'],
+    ['D4', '= D3 * D3'],
   ]);
 
   static fromObject(object: Record<string, string>): TableData {

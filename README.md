@@ -9,8 +9,8 @@ Uses:
 - Event handlers: `(click)`, `(focus)`, `(keyup.enter)`
 - `FormControl`
 - `FormGroup` subclass
-- Services
-- Components
+- Services: `EvaluatorService`, `SheetService`
+- Components: `LatticeSheetComponent`, `LatticeTableComponent`, `App`
 
 TODO:
 
