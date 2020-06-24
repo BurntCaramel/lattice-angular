@@ -12,6 +12,14 @@ Uses:
 - Services
 - Components
 
+TODO:
+
+- Tests! Using https://github.com/testing-library/angular-testing-library
+- Fix white overlap on cells
+- Add cell ranges
+- Add `SUM()`
+- Add `AVERAGE()`
+
 ----
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.9.
