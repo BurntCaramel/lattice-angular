@@ -1,4 +1,18 @@
-# LatticeAngular
+# Lattice Angular
+
+Spreadsheet built using Angular 9. Can handle expressions (`= 2 * 3 * 4`) or references to other cells (`= C5`) and basic functions (`= LEN(A2)` and `= JOIN(B3, B4)`).
+
+Uses:
+
+- `ngFor`, `ngIf` directives
+- Template reference variables
+- Event handlers: `(click)`, `(focus)`, `(keyup.enter)`
+- `FormControl`
+- `FormGroup` subclass
+- Services
+- Components
+
+----
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.9.
 
