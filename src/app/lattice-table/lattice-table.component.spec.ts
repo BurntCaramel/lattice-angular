@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { render, screen } from '@testing-library/angular';
+import { render, screen, prettyDOM, waitFor } from '@testing-library/angular';
 import user from '@testing-library/user-event';
 
 import { LatticeTableComponent } from './lattice-table.component';
@@ -51,12 +51,12 @@ describe('LatticeTableComponent using TestBed', () => {
 });
 
 describe('LatticeTableComponent using Testing Library', () => {
-  beforeEach(async () => {
+  async function subject() {
     await render(LatticeTableComponent, {
       componentProperties: {
         data: new TableData({
-          columnCount: 17,
-          rowCount: 21,
+          columnCount: 3,
+          rowCount: 5,
         }),
         evaluatorService: {
           evaluatorForEnvironment(
@@ -67,21 +67,40 @@ describe('LatticeTableComponent using Testing Library', () => {
         },
       },
     });
+  }
+
+  describe('initial state', () => {
+    beforeEach(subject);
+
+    it('shows table', () => {
+      expect(screen.getByRole('table')).toBeTruthy();
+    });
+
+    it('shows 3 column headers', () => {
+      expect(screen.getAllByRole('columnheader').length).toBe(3);
+    });
+
+    it('shows 5 row headers', () => {
+      expect(screen.getAllByRole('rowheader').length).toBe(5);
+    });
+
+    it('shows 15 textbox inputs', () => {
+      expect(screen.getAllByRole('textbox').length).toBe(15);
+    });
   });
 
-  it('shows table', () => {
-    expect(screen.getByRole('table')).toBeTruthy();
-  });
+  describe('adding maths expression', () => {
+    beforeEach(async () => {
+      await subject();
+      const b1Cell = screen.getByPlaceholderText('B1');
+      user.click(b1Cell);
+      await user.type(b1Cell, '= 12 * 12 {enter}');
+    });
 
-  it('shows 17 column headers', () => {
-    expect(screen.getAllByRole('columnheader').length).toBe(17);
-  });
-
-  it('shows 21 row headers', () => {
-    expect(screen.getAllByRole('rowheader').length).toBe(21);
-  });
-
-  it('shows 17 * 21 textbox inputs', () => {
-    expect(screen.getAllByRole('textbox').length).toBe(17 * 21);
+    it('renders result', async () => {
+      await waitFor(() => {
+        expect(screen.getByText('144')).toBeDefined();
+      });
+    });
   });
 });

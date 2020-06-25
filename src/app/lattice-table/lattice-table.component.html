@@ -10,13 +10,13 @@
       <th role="rowheader" class="border bg-gray-100">{{ row }}</th>
       <td *ngFor="let column of data.columns" class="border">
         <label class="block relative">
-          <div
+          <output
             *ngIf="!isFocused(column, row)"
             class="block px-2 py-2 absolute w-full bg-white"
             (click)="focusCellInput(column, row)"
           >
             {{calculateValueForCell(column, row)}}
-          </div>
+          </output>
           <input
             type="text"
             [attr.data-column]="column"

@@ -14,7 +14,6 @@ export class LatticeSheetComponent implements OnInit {
   tableData$: Observable<TableData>;
   evaluatorService: EvaluatorService;
 
-  // constructor(@Inject(SheetService) sheetService: SheetService, @Inject(EvaluatorService) evaluatorService: EvaluatorService) {
   constructor(sheetService: SheetService, evaluatorService: EvaluatorService) {
     this.tableData$ = sheetService.getTableData();
     this.evaluatorService = evaluatorService;

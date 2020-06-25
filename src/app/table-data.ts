@@ -5,28 +5,34 @@ export type TableCellValues = Map<CellID, CellValue>;
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 export class TableData {
-  // columnCount = 8;
   columnCount = 8;
   rowCount = 12;
 
-  constructor(options?: { columnCount: number, rowCount: number}) {
+  cellValues: TableCellValues = new Map<CellID, CellValue>();
+
+  constructor(options?: {
+    columnCount: number;
+    rowCount: number;
+    useDefaultValues?: boolean;
+  }) {
     if (options) {
       this.columnCount = options.columnCount;
       this.rowCount = options.rowCount;
+      if (options.useDefaultValues) {
+        this.cellValues = new Map<CellID, CellValue>([
+          ['A1', 'Type any text'],
+          ['B1', 'This will appear twice'],
+          ['B2', '= B1'],
+          ['B4', 'Count using `LEN`'],
+          ['B5', '= LEN(B1)'],
+          ['D1', '= 5 + 5'],
+          ['D2', '= D1 * 10'],
+          ['D3', '= D2 * 10'],
+          ['D4', '= D3 * D3'],
+        ]);
+      }
     }
   }
-
-  cellValues: TableCellValues = new Map<CellID, CellValue>([
-    ['A1', 'Type any text'],
-    ['B1', 'This will appear twice'],
-    ['B2', '= B1'],
-    ['B4', 'Count using `LEN`'],
-    ['B5', '= LEN(B1)'],
-    ['D1', '= 5 + 5'],
-    ['D2', '= D1 * 10'],
-    ['D3', '= D2 * 10'],
-    ['D4', '= D3 * D3'],
-  ]);
 
   static fromObject(object: Record<string, string>): TableData {
     const tableData = new TableData();
